@@ -5,10 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule],
   selector: 'app-login',
   standalone: true,
   styleUrl: './login.component.css',
@@ -19,15 +16,18 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  // Usando Signal para gerenciar o estado local de erro e carregamento (Padrão Angular 22)
-  errorMessage = signal<String | null>(null);
+  errorMessage = signal<string | null>(null);
   isLoading = signal<boolean>(false);
+  showPassword = signal<boolean>(false); // <-- Adicionado
 
-  // Estrututa do formulário reativo fortemente tipado
+  togglePasswordVisibility(): void {
+    this.showPassword.update((value) => !value); // <-- Adicionado
+  }
+
   loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
-    senha: ['', [Validators.required, Validators.minLength(6)]]
-  })
+    senha: ['', [Validators.required, Validators.minLength(6)]],
+  });
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
@@ -42,14 +42,14 @@ export class LoginComponent {
 
     this.authService.login(credentials).subscribe({
       next: () => {
-        // Redireciona para o painel principal após capturar o token JWT
         this.router.navigate(['dashboard']);
       },
       error: (err) => {
         this.isLoading.set(false);
-        // Captura a mensagem tratada da API ou exibe um fallback seguro
-        this.errorMessage.set(err.error?.message || 'Falha ao realizar login. Verifique suas credenciais.')
-      }
-    })
+        this.errorMessage.set(
+          err.error?.message || 'Falha ao realizar login. Verifique suas credenciais.',
+        );
+      },
+    });
   }
 }

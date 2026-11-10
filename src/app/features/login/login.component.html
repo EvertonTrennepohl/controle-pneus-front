@@ -1,57 +1,65 @@
 <div class="login-container">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-        <h2>Controle Pneus - Login</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <h2>Controle Pneus - Login</h2>
 
-        <!-- Mensagem de erro Global baseada no Signal errorMessage -->
-         @if (errorMessage()) {
-            <div class="error-banner">
-                {{ errorMessage() }}
-            </div>
-         }
+    @if (errorMessage()) {
+      <div class="error-banner">
+        {{ errorMessage() }}
+      </div>
+    }
 
-        <!-- Campo de e-mail -->
-         <div class="form-group">
-            <label for="email">e-mail</label>
-            <input
-                id="email"
-                type="email"
-                formControlName="email"
-                placeholder="Digite seu e-mail"
-                [attr.disabled]="isLoading() ? true : null"
-            />
+    <div class="form-group">
+      <label for="email">E-mail</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="Digite seu e-mail"
+        [attr.disabled]="isLoading() ? true : null"
+      />
 
-            @if (loginForm.controls.email.touched && loginForm.controls.email.errors?.['required']) {
-                <small class="error-text">O e-mail é obrigatório.</small>
-            }
-            @if (loginForm.controls.email.touched && loginForm.controls.email.errors?.['email']) {
-                <small class="error-text">Insira um e-mail válido.</small>
-            }
-         </div>
+      @if (loginForm.controls.email.touched && loginForm.controls.email.errors?.['required']) {
+        <small class="error-text">O e-mail é obrigatório.</small>
+      }
+      @if (loginForm.controls.email.touched && loginForm.controls.email.errors?.['email']) {
+        <small class="error-text">Insira um e-mail válido.</small>
+      }
+    </div>
 
-         <!-- Campo de senha -->
-          <div class="form-group">
-            <label for="senha">Senha</label>
-            <input
-                id="senha"
-                type="password"
-                formControlName="senha"
-                placeholder="Digite sua senha"
-                [attr.disabled]="isLoading() ? true : null"
-            />
+    <div class="form-group">
+      <label for="senha">Senha</label>
 
-            @if (loginForm.controls.senha.touched && loginForm.controls.senha.errors?.['required']) {
-                <small class="error-text">A senha é obrigatória.</small>
-            }
-            @if (loginForm.controls.senha.touched && loginForm.controls.senha.errors?.['minlength']) {
-                <small class="error-text">A senha deve ter no mínimo 6 caracteres.</small>
-            }
-          </div>
+      <!-- Div wrapper para envelopar o campo e o botão -->
+      <div class="password-wrapper">
+        <input
+          id="senha"
+          [type]="showPassword() ? 'text' : 'password'"
+          formControlName="senha"
+          placeholder="Digite sua senha"
+          [attr.disabled]="isLoading() ? true : null"
+        />
+        <button
+          type="button"
+          class="toggle-password-btn"
+          (click)="togglePasswordVisibility()"
+          [attr.disabled]="isLoading() ? true : null"
+          tabindex="-1"
+        >
+          <!-- Usando símbolos Unicode puros (Olho aberto e Olho fechado) -->
+          {{ showPassword() ? '👁️‍🗨️' : '👁️' }}
+        </button>
+      </div>
 
-          <!-- Botão de ação  mapeado com o Signal isLoading -->
-           <button type="submit" [disabled]="isLoading() || loginForm.invalid">
-                {{ isLoading()? 'Autenticando...' : 'Entrar' }}
-           </button>
-        
-    </form>
+      @if (loginForm.controls.senha.touched && loginForm.controls.senha.errors?.['required']) {
+        <small class="error-text">A senha é obrigatória.</small>
+      }
+      @if (loginForm.controls.senha.touched && loginForm.controls.senha.errors?.['minlength']) {
+        <small class="error-text">A senha deve ter no mínimo 6 caracteres.</small>
+      }
+    </div>
 
+    <button type="submit" [disabled]="isLoading() || loginForm.invalid">
+      {{ isLoading() ? 'Autenticando...' : 'Entrar' }}
+    </button>
+  </form>
 </div>

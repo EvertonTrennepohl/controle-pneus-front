@@ -1,4 +1,4 @@
 export const environment = {
-    production: true,
-    apiUrl: 'https://ngfood-adbq.onrender.com/api/v1'
+  production: true,
+  apiUrl: 'https://controle-pneus-frota.onrender.com/api/v1',
 };
